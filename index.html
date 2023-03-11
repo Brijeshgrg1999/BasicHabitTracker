@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Habbit Tracker</title>
+    <style>
+                    body{
+                    
+                padding: 0;
+                margin: 0;
+                vertical-align: center;
+                height: 100%;
+            }
+
+            .container {
+                display: flex;
+                justify-content: center;
+                justify-content: space-around;
+                padding: 15px;
+              
+              
+                /* flex-wrap: wrap; */
+            }
+            .container a {
+                text-decoration: none;
+                color: green;
+            }
+
+                h1{
+                    color: grey;
+                    text-align: center;
+                }
+            .bodySection
+            {
+                text-align: center;
+                margin-top: 20%;
+            }
+            .habitStorage
+            {
+                text-align: center;
+            }
+
+            #error
+            {
+                color : red ; 
+            }
+            .newTask{
+                padding: 10px;
+                color: black ; 
+            }
+
+            .footer{
+                position: relative;
+                bottom: 20px;
+                padding: 10px;
+                text-align: center;
+               
+            }
+            .deletebtn{
+                padding: 3px;
+                background-color: brown;
+                color: white;
+                border-radius: 5px;
+            }
+            .editbtn{
+                padding: 3px;
+                background-color: lightgreen;
+                color: white;
+                border-radius: 5px;
+            }
+    </style>
+</head>
+<body>
+
+
+    <div class="container">
+        <div><a href="#">Home</a></div>
+        <div><a href="https://www.instagram.com/gurungbrijes/" target="_blank">Contact</a></div>
+        <div><a href="#">FeedBack</a></div>
+       
+    </div>
+    <div class="bodySection">
+            <h1> MY HABIT TRACKER </h1>
+
+       <form action="" id="form">
+         <input type="text" id="textInput">
+         <button type="submit">Add</button>
+       </form>
+
+            <!-- this is where the task are stored -->
+            <div id="habitStorage">
+               <div>
+                <p>Your current task are : </p>
+                <span class="option">
+                </span>
+               </div>
+            </div>
+
+            <h5 id="error"> </h5>
+
+
+            
+              <p id="res"> </p>
+           
+
+    </div>
+
+
+    <div class="footer">
+        This is the basic project only using vanilla js 
+    </div>
+
+
+
+    <script>
+            let habbitTask = document.getElementById("textInput"); 
+            let form = document.getElementById("form"); 
+            let errorMsg = document.getElementById("error");
+            let newTask = document.getElementById("habitStorage");
+            let data ={} ;
+            let resss = document.getElementById("res");
+
+            let rand = Math.random()*100 ; 
+
+
+    
+            // form submmit
+          form.addEventListener("submit", (e)=>{
+           e.preventDefault();
+           FormValid(); 
+        }
+        );
+
+
+        //   form validation
+            const FormValid = ()=>{
+            if(habbitTask.value)
+            {
+            errorMsg.innerHTML = "" ; 
+            acceptData(); 
+            habbitTask.value = "" ; 
+            }
+            else
+            {
+              errorMsg.innerHTML = "Sorry , cannot add empty task " ; 
+            }
+        }
+
+        let acceptData=()=>{
+            data["text"] = habbitTask.value ; 
+            createPost() ; 
+            getQuotes();
+        }
+
+        let createPost=()=>{
+            newTask.innerHTML += `<div class="newTask">
+            <p> ${data.text}</p>
+                <span>
+                <button class="deletebtn" onClick="deleteTask(this)"> delete </button>
+                <button class="editbtn" onClick="editTask(this)"> Edit </button>
+                </span>
+                </div>`
+        }
+      
+     
+        async function getQuotes()
+        {
+            const response = await fetch("https://type.fit/api/quotes");
+            const res = await response.json();  
+            
+          setTimeout((rand)=>{
+            for(let i = 0 ; i < res.length ; i++){
+                resss.textContent = res[i].text ; 
+            }
+          } , 1000)
+           
+        }
+        getQuotes();
+
+        //delete handle 
+        let deleteTask = (e)=>{
+            console.log("delete");
+            e.parentElement.parentElement.remove() ; 
+        }
+
+        let editTask = (e) =>{
+            habbitTask.value = e.parentElement.previousElementSibling.innerHTML;
+            e.parentElement.parentElement.remove() ; 
+         
+
+
+        }
+
+    
+ 
+   
+       </script>
+
+
+
+    <!-- this is the logic of the function -->
+
+  
+</body>
+</html>
